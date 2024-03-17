@@ -17,10 +17,8 @@ class LeafNode(HTMLNode):
 
         html_attrs = super().props_to_html()
 
-        if self.value != "":
-            return f"<{self.tag}{html_attrs}>{self.value.strip(' \n\t')}</{self.tag}>"
+        return f"<{self.tag}{html_attrs}>{self.value.strip(' \n\t')}</{self.tag}>"
 
-        return f"<{self.tag}{html_attrs}>"
 
     def __repr__(self):
         return f"""LeafNode: (

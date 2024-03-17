@@ -66,7 +66,7 @@ class TestTextNode(unittest.TestCase):
         alt = "Picture of a valley with a river flowing in the foreground and snow-capped mountains in the distance."
         src = "https://example.com/valley.jpg"
         node = TextNode(alt, "image", src)
-        expected = f'<img src="{src}" alt="{alt}">'
+        expected = f'<img src="{src}" alt="{alt}"></img>'
         self.assertEqual(expected, node.text_node_to_html_node().to_html())
 
     def test_textNodeToHTMLNode_whenTextTypeIsLink(self):
