@@ -7,6 +7,7 @@ class TestParentNode(unittest.TestCase):
     __EXCPMSG_NO_CHILDREN = "A parent node must have at least one child node."
     __EXCPMSG_NO_TAG      = "A tag must be specified for the parent node." 
 
+
     def __assertExceptionMessage(self, exception, msg, method_to_test):
         with self.assertRaises(exception) as cm:
             method_to_test()

@@ -15,6 +15,7 @@ class TestHTMLNode(unittest.TestCase):
 
         self.assertEqual(expected, attrs)
 
+
     def test_propsToHtml_whenNoProps(self):
         node = HTMLNode('a', "Link")
 

@@ -7,6 +7,7 @@ class LeafNode(HTMLNode):
         self.props = props
         super().__init__(tag, value, props=props)
 
+
     def to_html(self):
         # values are allowed to be empty strings
         if self.value is None:

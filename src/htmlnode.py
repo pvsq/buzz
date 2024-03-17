@@ -5,8 +5,10 @@ class HTMLNode():
         self.children = children
         self.props = props
 
+
     def to_html(self):
         raise NotImplementedError()
+
 
     def props_to_html(self):
         html_attrs = ""
@@ -17,6 +19,7 @@ class HTMLNode():
         for prop in self.props:
             html_attrs += f' {prop}="{self.props[prop]}"'
         return html_attrs
+
 
     def __repr__(self):
         return f"""HTMLNode: (
