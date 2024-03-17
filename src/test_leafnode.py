@@ -7,7 +7,11 @@ class TestLeafNode(unittest.TestCase):
         node = LeafNode("a")
         self.assertRaises(ValueError, node.to_html)
 
-    def test_toHTML_whenTagIsNone(self):
+    def test_toHTML_whenValueIsEmptyString(self):
+        node = LeafNode("a", "")
+        self.assertEqual("<a></a>", node.to_html())
+
+    def test_toHTML_whenTagIsNoneOrEmptyString(self):
         node = LeafNode(value="This is just raw text.")
         expected = "This is just raw text."
         self.assertEqual(expected, node.to_html())

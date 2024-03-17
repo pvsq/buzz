@@ -117,7 +117,7 @@ class TestParentNode(unittest.TestCase):
         self.assertEqual(expected, node.to_html())
 
 
-    def test_toHTML_withNestedParentNodes_and_oneParentNodeTagMissing(self):
+    def test_toHTML_withNestedParentNodes_and_oneParentNodeTagNone(self):
         node = ParentNode(
             "html",
             [
@@ -149,7 +149,7 @@ class TestParentNode(unittest.TestCase):
         self.__assertExceptionMessage(ValueError, TestParentNode.__EXCPMSG_NO_TAG, node.to_html)
 
 
-    def test_toHTML_withNestedParentNodes_and_oneParentNodeChildrenMissing(self):
+    def test_toHTML_withNestedParentNodes_and_oneParentNodeChildrenIsEmpty(self):
         node = ParentNode(
             "html",
             [
@@ -179,7 +179,39 @@ class TestParentNode(unittest.TestCase):
         self.__assertExceptionMessage(ValueError, TestParentNode.__EXCPMSG_NO_CHILDREN, node.to_html)
 
 
-    def test_toHTML_withNestedParentNodes_and_oneLeafNodeValueMissing(self):
+    def test_toHTML_withNestedParentNodes_and_oneLeafNodeValueNone(self):
+        node = ParentNode(
+            "html",
+            [
+                ParentNode(
+                    "head",
+                    [
+                        LeafNode("title"),  # value is None
+                    ]
+                ),
+                ParentNode(
+                    "body",
+                    [
+                        LeafNode("h1", "Front-end Development is the Worst"),
+                        #LeafNode("p", ""),
+                        ParentNode(
+                            "p",
+                            [
+                                LeafNode(None, "Real programmers code, not silly markup languages. They code on Arch Linux, not Mac OS, and certainly not Windows. They use Vim, not VS Code. They use C, not HTML. Come to the "),
+                                LeafNode("a", "backend", { "href": "https://www.boot.dev" }),
+                                LeafNode(None, ", where the real programming happens.")
+                            ],
+                        ),
+                    ],
+                )
+            ],
+            { "lang": "en-US" }
+        )
+
+        self.__assertExceptionMessage(ValueError, "A value is required for HTML leaf node", node.to_html)
+
+
+    def test_toHTML_withNestedParentNodes_and_oneLeafNodeValueEmptyString(self):
         node = ParentNode(
             "html",
             [
@@ -195,7 +227,7 @@ class TestParentNode(unittest.TestCase):
                         LeafNode("h1", "Front-end Development is the Worst"),
                         #LeafNode("p", ""),
                         ParentNode(
-                            None,
+                            "p",
                             [
                                 LeafNode(None, "Real programmers code, not silly markup languages. They code on Arch Linux, not Mac OS, and certainly not Windows. They use Vim, not VS Code. They use C, not HTML. Come to the "),
                                 LeafNode("a", "backend", { "href": "https://www.boot.dev" }),
@@ -208,6 +240,8 @@ class TestParentNode(unittest.TestCase):
             { "lang": "en-US" }
         )
 
-        self.__assertExceptionMessage(ValueError, "A value is required for HTML leaf node", node.to_html)
+        expected = '<html lang="en-US"><head><title></title></head><body><h1>Front-end Development is the Worst</h1><p>Real programmers code, not silly markup languages. They code on Arch Linux, not Mac OS, and certainly not Windows. They use Vim, not VS Code. They use C, not HTML. Come to the <a href="https://www.boot.dev">backend</a>, where the real programming happens.</p></body></html>'
+
+        self.assertEqual(expected, node.to_html())
 
 
