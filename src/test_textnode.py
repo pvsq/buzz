@@ -1,6 +1,15 @@
 import unittest
 
-from textnode import TextNode
+from textnode import (
+    TextNode,
+    text_type_text,
+    text_type_bold,
+    text_type_italic,
+    text_type_code,
+    text_type_link,
+    text_type_image,
+    text_node_to_html_node
+)
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -35,42 +44,42 @@ class TestTextNode(unittest.TestCase):
 
     def test_textNodeToHTMLNode_whenTextTypeIsInvalid(self):
         node = TextNode("This text glows.", "glow", "http://localhost:8000")
-        self.assertRaises(ValueError, node.text_node_to_html_node)
+        self.assertRaises(ValueError, text_node_to_html_node, node)
 
 
     def test_textNodeToHTMLNode_whenTextTypeIsText(self):
         text = "Raw text. No need to mark up this paragraph."
         node = TextNode(text, "text")
         expected = text
-        self.assertEqual(expected, node.text_node_to_html_node().to_html())
+        self.assertEqual(expected, text_node_to_html_node(node).to_html())
 
 
     def test_textNodeToHTMLNode_whenTextTypeIsTextAndHasUrl(self):
         text = "Raw text. No need to mark up this paragraph."
         node = TextNode(text, "text", "https://www.example.com")
         expected = text
-        self.assertEqual(expected, node.text_node_to_html_node().to_html())
+        self.assertEqual(expected, text_node_to_html_node(node).to_html())
 
 
     def test_textNodeToHTMLNode_whenTextTypeIsBold(self):
         text = "This line makes some bold claims"
         node = TextNode(text, "bold")
         expected = f"<b>{text}</b>"
-        self.assertEqual(expected, node.text_node_to_html_node().to_html())
+        self.assertEqual(expected, text_node_to_html_node(node).to_html())
 
 
     def test_textNodeToHTMLNode_whenTextTypeIsItalic(self):
         text = "The information contained in this document is strictly confidential."
         node = TextNode(text, "italic")
         expected = f"<i>{text}</i>"
-        self.assertEqual(expected, node.text_node_to_html_node().to_html())
+        self.assertEqual(expected, text_node_to_html_node(node).to_html())
 
 
     def test_textNodeToHTMLNode_whenTextTypeIsCode(self):
         text = 'title = "why html development sucks"; print(doc[::-1])'
         node = TextNode(text, "code")
         expected = f"<code>{text}</code>"
-        self.assertEqual(expected, node.text_node_to_html_node().to_html())
+        self.assertEqual(expected, text_node_to_html_node(node).to_html())
 
 
     def test_textNodeToHTMLNode_whenTextTypeIsImage(self):
@@ -78,7 +87,7 @@ class TestTextNode(unittest.TestCase):
         src = "https://example.com/valley.jpg"
         node = TextNode(alt, "image", src)
         expected = f'<img src="{src}" alt="{alt}"></img>'
-        self.assertEqual(expected, node.text_node_to_html_node().to_html())
+        self.assertEqual(expected, text_node_to_html_node(node).to_html())
 
 
     def test_textNodeToHTMLNode_whenTextTypeIsLink(self):
@@ -86,7 +95,7 @@ class TestTextNode(unittest.TestCase):
         href_link = "https://www.example.com/about"
         node = TextNode(anchortext, "link", href_link)
         expected = f'<a href="{href_link}">{anchortext}</a>'
-        self.assertEqual(expected, node.text_node_to_html_node().to_html())
+        self.assertEqual(expected, text_node_to_html_node(node).to_html())
 
 
 if __name__ == "__main__":
