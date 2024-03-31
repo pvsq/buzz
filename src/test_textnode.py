@@ -9,7 +9,6 @@ from textnode import (
     text_type_link,
     text_type_image,
     text_node_to_html_node,
-    split_nodes_delimiter
 )
 
 class TestTextNode(unittest.TestCase):
@@ -97,84 +96,6 @@ class TestTextNode(unittest.TestCase):
         node = TextNode(anchortext, text_type_link, href_link)
         expected = f'<a href="{href_link}">{anchortext}</a>'
         self.assertEqual(expected, text_node_to_html_node(node).to_html())
-
-
-    def test_splitNodesDelimiter_withSingleNode(self):
-        node = TextNode("This is text with a `code block` word", text_type_text)
-        new_nodes = split_nodes_delimiter([node], "`", text_type_code)
-        expected = [
-            TextNode("This is text with a ", text_type_text),
-            TextNode("code block", text_type_code),
-            TextNode(" word", text_type_text),
-        ]
-        self.assertListEqual(new_nodes, expected)
-
-
-    def test_splitNodesDelimiter_withMultiplesNodes(self):
-        nodes = [
-            TextNode("This is text with an *emphasized block* of words", text_type_text),
-            TextNode("Some bold text", text_type_bold),
-            TextNode("Welcome to the *jungle*, it gets *worse here everyday*.", text_type_text),
-        ]
-        expected = [
-            TextNode("This is text with an ", text_type_text),
-            TextNode("emphasized block", text_type_italic),
-            TextNode(" of words", text_type_text),
-            TextNode("Some bold text", text_type_bold),
-            TextNode("Welcome to the ", text_type_text),
-            TextNode("jungle", text_type_italic),
-            TextNode(", it gets ", text_type_text),
-            TextNode("worse here everyday", text_type_italic),
-            TextNode(".", text_type_text),
-        ]
-        new_nodes = split_nodes_delimiter(nodes, "*", text_type_italic)
-        self.assertListEqual(new_nodes, expected)
-
-
-    def test_splitNodesDelimiter_withEmptyList(self):
-        nodes = []
-        expected = []
-        new_nodes = split_nodes_delimiter(nodes, "**", text_type_bold)
-        self.assertListEqual(new_nodes, expected)
-
-
-    def test_splitNodesDelimiter_withDelimiterNotClosed(self):
-        nodes = [
-            TextNode("This text with *italicized text* has *not been closed", text_type_text)
-        ]
-        self.assertRaises(ValueError, split_nodes_delimiter, nodes, "*", text_type_italic)
-
-
-    def test_splitNodesDelimiter_withNoTextTypeTextNodes(self):
-        nodes = [
-            TextNode("Some bold text", text_type_bold),
-            TextNode("Some italicized text", text_type_italic),
-            TextNode("Text styled inline with a fixed-width font", text_type_code),
-            TextNode("Some more italicized text", text_type_italic)
-        ]
-        new_nodes = split_nodes_delimiter(nodes, "`", text_type_code)
-        self.assertListEqual(new_nodes, nodes)
-
-
-    def test_splitNodesDelimiter_withMixedTextTypeTextNodes(self):
-        nodes = [
-            TextNode("This is text with an *emphasized block* of words", text_type_text),
-            TextNode("Some bold text", text_type_bold),
-            TextNode("Text styled `inline` with a `fixed-width` font", text_type_text),
-            TextNode("Welcome to the **jungle**, it gets **worse here everyday**.", text_type_text),
-        ]
-        new_nodes = split_nodes_delimiter(nodes, "`", text_type_code)
-        expected = [
-            TextNode("This is text with an *emphasized block* of words", text_type_text),
-            TextNode("Some bold text", text_type_bold),
-            TextNode("Text styled ", text_type_text),
-            TextNode("inline", text_type_code),
-            TextNode(" with a ", text_type_text),
-            TextNode("fixed-width", text_type_code),
-            TextNode(" font", text_type_text),
-            TextNode("Welcome to the **jungle**, it gets **worse here everyday**.", text_type_text),
-        ]
-        self.assertEqual(new_nodes, expected)
 
 
 if __name__ == "__main__":
