@@ -6,6 +6,7 @@ from md2text import (
     split_nodes_delimiter,
     split_nodes_image,
     split_nodes_link,
+    text_to_text_nodes,
 )
 
 from textnode import (
@@ -293,4 +294,41 @@ class TestMd2Text(unittest.TestCase):
             TextNode("link", text_type_link, "https://i.imgur.com/3elNhQu.png"),
         ]
         self.assertEqual(new_nodes, expected)
+
+
+    def test_textToTextNodes(self):
+        text = "This is **text** with an *italic* word and a `code block` and an ![image](https://i.imgur.com/zjjcJKZ.png) and a [link](https://boot.dev)"
+        nodes = text_to_text_nodes(text)
+        expected = [
+            TextNode("This is ", text_type_text),
+            TextNode("text", text_type_bold),
+            TextNode(" with an ", text_type_text),
+            TextNode("italic", text_type_italic),
+            TextNode(" word and a ", text_type_text),
+            TextNode("code block", text_type_code),
+            TextNode(" and an ", text_type_text),
+            TextNode("image", text_type_image, "https://i.imgur.com/zjjcJKZ.png"),
+            TextNode(" and a ", text_type_text),
+            TextNode("link", text_type_link, "https://boot.dev"),
+        ]
+        self.assertEqual(nodes, expected)
+
+
+    def test_textToTextNodes_withBoldTextOnly(self):
+        text = "This is **text** that is **bold** and **this is some more bold text** and **some more** and this is the **end** of the text."
+        nodes = text_to_text_nodes(text)
+        expected = [
+            TextNode("This is ", text_type_text),
+            TextNode("text", text_type_bold),
+            TextNode(" that is ", text_type_text),
+            TextNode("bold", text_type_bold),
+            TextNode(" and ", text_type_text),
+            TextNode("this is some more bold text", text_type_bold),
+            TextNode(" and ", text_type_text),
+            TextNode("some more", text_type_bold),
+            TextNode(" and this is the ", text_type_text),
+            TextNode("end", text_type_bold),
+            TextNode(" of the text.", text_type_text),
+        ]
+        self.assertEqual(nodes, expected)
 
