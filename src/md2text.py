@@ -39,7 +39,7 @@ def extract_markdown_images(text):
 
 
 def extract_markdown_links(text):
-    return re.findall(r"[^!]\[(.*?)\]\((.*?)\)", text)
+    return re.findall(r"!{0}\[(.*?)\]\((.*?)\)", text)
 
 
 def split_nodes_image(old_nodes):
@@ -79,7 +79,7 @@ def split_nodes_link(old_nodes):
         text = [node.text]
         for match in matches:
             split_text = text[0].split(f"[{match[0]}]({match[1]})", 1)
-            if split_text[0][-1] == "!":
+            if split_text[0] != '' and split_text[0][-1] == "!":
                 new_nodes.append(TextNode(split_text[0] + f"[{match[0]}]({match[1]})", 
                                           text_type_text))
                 if split_text[1:]:
