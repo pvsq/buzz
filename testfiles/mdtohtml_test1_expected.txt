@@ -1,0 +1,8 @@
+<div><h1>Heading of The First Level</h1><p>This is <b>bolded</b> paragraph</p><blockquote>Did you know?
+This block of text is a quote
+Every line of this block
+Must start with ">"</blockquote><p>>This is not a quote
+This is another paragraph with <i>italic</i> text and <code>code</code> here
+This is the same paragraph on a new line</p><ol><li>An ordered list</li><li>starting with the list item</li><li>numbered 1.</li><li>and ending with</li><li>list item number</li><li>5.</li></ol><h2>Heading of the second level</h2><ul><li>This is a list</li><li>with items</li></ul><ul><li>Another list with</li><li>an image <img src="https://i.imgur.com/zjjcJKZ.png" alt="an image"></img></li><li>and a <a href="#">link</a></li></ul><code><pre>Vapor
+wave
+Aesthetic</pre></code></div>

@@ -8,7 +8,8 @@ from block_md2text import (
     block_type_code,
     block_type_quote,
     block_type_orderedlist,
-    block_type_unorderedlist
+    block_type_unorderedlist,
+    markdown_to_html_node
 )
 
 class TestBlockMd2Text(unittest.TestCase):
@@ -156,4 +157,65 @@ some more text at the end."""
             block_types.append(block_to_block_type(block))
         expected = [block_type_orderedlist]
         self.assertListEqual(block_types, expected)
+
+
+    def test_markdownToHtmlNode_withSimpleMarkdownAsInput(self):
+        markdown = """# Heading of The First Level
+
+This is **bolded** paragraph
+
+>Did you know?
+>This block of text is a quote
+>Every line of this block
+>Must start with ">"
+
+>This is not a quote
+This is another paragraph with *italic* text and `code` here
+This is the same paragraph on a new line
+
+1. An ordered list
+2. starting with the list item
+3. numbered 1.
+4. and ending with
+5. list item number
+6. 5.
+
+## Heading of the second level
+
+* This is a list
+* with items
+
+- Another list with
+- an image ![an image](https://i.imgur.com/zjjcJKZ.png)
+- and a [link](#)
+
+```
+Vapor
+wave
+Aesthetic
+```
+"""
+        html = markdown_to_html_node(markdown).to_html()
+
+        expected = ""
+        with open("./testfiles/mdtohtml_test1_expected.txt", "r") as f:
+            expected = f.read()
+        expected = expected[:-1]  # remove newline at the end
+
+        self.assertEqual(html, expected)
+
+
+    def test_markdownToHtmlNode_withComplexMarkdownAsInput(self):
+        text = ""
+        with open("./testfiles/notes.md", "r") as f:
+            text = f.read()
+
+        html = markdown_to_html_node(text).to_html()
+
+        expected = ""
+        with open("./testfiles/testhtml_expected.txt", "r") as t:
+            expected = t.read()
+        expected = expected[:-1]  # remove newline at the end
+
+        self.assertEqual(html, expected)
 
