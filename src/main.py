@@ -1,8 +1,10 @@
-from textnode import TextNode
+from buzz import (
+    copy_dir_recursively,
+    generate_pages_recursive
+)
 
 def main():
-    tn = TextNode("This is a text node", "bold", "https://www.boot.dev")
-    print(tn)
-
+    copy_dir_recursively("./static/", "./public/")
+    generate_pages_recursive("./content/", "./template.html", "./public/")
 
 main()
